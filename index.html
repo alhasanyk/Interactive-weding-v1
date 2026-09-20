@@ -7,7 +7,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Pinyon+Script&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:ital,wght@0,500;0,600;0,700;1,400&family=Pinyon+Script&display=swap" rel="stylesheet">
 
   <style>
     * {
@@ -96,9 +96,23 @@
     }
 
     /* التوقيتات الدقيقة لظهور الأسماء بالتتابع */
-    .name-top, .name-bottom, .name-and {
+    .name-top, .name-bottom {
       font-family: 'Pinyon Script', cursive;
       color: #3b2a22;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    /* تعديل خط كلمة and لجعلها مقروءة بوضوح تام وليست متداخلة */
+    .name-and {
+      font-family: 'Cinzel', serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 1.2rem;
+      color: #7a6558;
+      margin: 10px 0;
+      letter-spacing: 3px;
       opacity: 0;
       transform: translateY(20px);
       transition: opacity 1s ease, transform 1s ease;
@@ -107,21 +121,17 @@
     .name-top {
       font-size: 2.8rem;
       line-height: 1.1;
-      transition-delay: 1.5s; /* يظهر الأول بعد 1.5 ثانية */
+      transition-delay: 1.5s;
     }
 
     .name-and {
-      font-size: 1.8rem;
-      color: #8c7365;
-      margin: 8px 0;
-      font-style: italic;
-      transition-delay: 2.5s; /* تظهر كلمة and في المنتصف */
+      transition-delay: 2.5s;
     }
 
     .name-bottom {
       font-size: 2.8rem;
       line-height: 1.1;
-      transition-delay: 3.5s; /* يظهر الثاني بعد الأول بـ 2 ثانية */
+      transition-delay: 3.5s;
     }
 
     #main-background.active .name-top,
@@ -253,7 +263,7 @@
     <p class="press-text">Please press to open</p>
   </div>
 
-  <!-- 2. شاشة الخلفية والأسماء (and مؤكدة) -->
+  <!-- 2. شاشة الخلفية والأسماء (and واضحة تماماً) -->
   <div id="main-background" class="screen-container">
     <img src="https://files.catbox.moe/mndbwr.jpeg" alt="Background">
     <div id="couple-names">
