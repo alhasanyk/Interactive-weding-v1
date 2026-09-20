@@ -94,7 +94,7 @@
       width: 100%;
     }
 
-    /* خصائص ظهور الأسماء بالتتابع */
+    /* خصائص الأسماء والتحكم بالتوقيتات بدقة */
     .name-top, .name-bottom, .name-and {
       font-family: 'Pinyon Script', cursive;
       color: #3b2a22;
@@ -106,6 +106,8 @@
     .name-top {
       font-size: 2.8rem;
       line-height: 1.1;
+      /* يظهر الاسم الأول بعد 1.5 ثانية من دخول الشاشة */
+      transition-delay: 1.5s; 
     }
 
     .name-and {
@@ -113,30 +115,23 @@
       color: #8c7365;
       margin: 8px 0;
       font-style: italic;
-      transition-delay: 0.5s; /* تظهر كلمة و (and) بعد الاسم الأول بفترة بسيطة أو مع الثاني حسب رغبتك */
+      /* تظهر كلمة و (and) مع الاسم الأول أو قبيل الاسم الثاني بفترة قصيرة */
+      transition-delay: 2.5s; 
     }
 
     .name-bottom {
       font-size: 2.8rem;
       line-height: 1.1;
+      /* يظهر الاسم الثاني بعد الاسم الأول بـ 2 ثانية (أي بعد 3.5 ثانية إجمالاً) */
+      transition-delay: 3.5s; 
     }
 
-    /* عند تفعيل الشاشة الثانية يبدأ ظهور العناصر المتتابع */
-    #main-background.active .name-top {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    #main-background.active .name-and {
-      opacity: 1;
-      transform: translateY(0);
-      transition-delay: 1.2s; /* ظهور كلمة و */
-    }
-
+    /* عند تفعيل الشاشة الثانية، تبدأ التوقيتات أعلاه بالعمل تدريجياً */
+    #main-background.active .name-top,
+    #main-background.active .name-and,
     #main-background.active .name-bottom {
       opacity: 1;
       transform: translateY(0);
-      transition-delay: 2.2s; /* ظهور الاسم الثاني بعد الأول بمدة مطابقة للطلب (حوالي 1.5 ثانية بعد الأول) */
     }
 
     #final-container {
@@ -260,7 +255,7 @@
     <p class="press-text">Please press to open</p>
   </div>
 
-  <!-- 2. شاشة الخلفية والأسماء المتتابعة -->
+  <!-- 2. شاشة الخلفية والأسماء -->
   <div id="main-background" class="screen-container">
     <img src="https://files.catbox.moe/mndbwr.jpeg" alt="Background">
     <div id="couple-names">
@@ -270,7 +265,7 @@
     </div>
   </div>
 
-  <!-- 3. الشاشة الأخيرة -->
+  <!-- 3. الشاشة الأخيرة (تم زيادة الوقت لتناسب ظهور الأسماء بالكامل قبل الانتقال) -->
   <div id="final-container" class="screen-container">
     <img src="https://files.catbox.moe/3e9448.jpeg" alt="Final Image">
 
@@ -349,10 +344,11 @@
       envelope.classList.remove('active');
       background.classList.add('active');
 
+      // تم زيادة وقت الانتقال إلى الشاشة الأخيرة ليمنح وقتاً كافياً لقراءة الاسم الثاني بالكامل
       setTimeout(() => {
         background.classList.remove('active');
         finalContainer.classList.add('active');
-      }, 4200); // زدت وقت الشاشة الثانية قليلاً لتلحق بقراءة الاسم الثاني بوضوح
+      }, 5500);
     }
   </script>
 
