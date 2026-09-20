@@ -51,6 +51,7 @@
       pointer-events: auto;
     }
 
+    /* لملء الشاشة بالكامل وتغطيتها بدون فراغات */
     .screen-container img {
       width: 100%;
       height: 100%;
@@ -94,7 +95,7 @@
       width: 100%;
     }
 
-    /* خصائص الأسماء والتحكم بالتوقيتات بدقة */
+    /* التوقيتات الدقيقة لظهور الأسماء بالتتابع */
     .name-top, .name-bottom, .name-and {
       font-family: 'Pinyon Script', cursive;
       color: #3b2a22;
@@ -106,8 +107,7 @@
     .name-top {
       font-size: 2.8rem;
       line-height: 1.1;
-      /* يظهر الاسم الأول بعد 1.5 ثانية من دخول الشاشة */
-      transition-delay: 1.5s; 
+      transition-delay: 1.5s; /* يظهر الأول بعد 1.5 ثانية */
     }
 
     .name-and {
@@ -115,18 +115,15 @@
       color: #8c7365;
       margin: 8px 0;
       font-style: italic;
-      /* تظهر كلمة و (and) مع الاسم الأول أو قبيل الاسم الثاني بفترة قصيرة */
-      transition-delay: 2.5s; 
+      transition-delay: 2.5s; /* تظهر كلمة and في المنتصف */
     }
 
     .name-bottom {
       font-size: 2.8rem;
       line-height: 1.1;
-      /* يظهر الاسم الثاني بعد الاسم الأول بـ 2 ثانية (أي بعد 3.5 ثانية إجمالاً) */
-      transition-delay: 3.5s; 
+      transition-delay: 3.5s; /* يظهر الثاني بعد الأول بـ 2 ثانية */
     }
 
-    /* عند تفعيل الشاشة الثانية، تبدأ التوقيتات أعلاه بالعمل تدريجياً */
     #main-background.active .name-top,
     #main-background.active .name-and,
     #main-background.active .name-bottom {
@@ -245,7 +242,7 @@
 <body>
 
   <!-- عنصر الصوت المباشر -->
-  <audio id="bg-audio" loop>
+  <audio id="bg-audio" preload="auto" loop>
     <source src="https://files.catbox.moe/9rhkq4.mp3" type="audio/mp3">
   </audio>
 
@@ -255,7 +252,7 @@
     <p class="press-text">Please press to open</p>
   </div>
 
-  <!-- 2. شاشة الخلفية والأسماء -->
+  <!-- 2. شاشة الخلفية والأسماء (and) -->
   <div id="main-background" class="screen-container">
     <img src="https://files.catbox.moe/mndbwr.jpeg" alt="Background">
     <div id="couple-names">
@@ -265,7 +262,7 @@
     </div>
   </div>
 
-  <!-- 3. الشاشة الأخيرة (تم زيادة الوقت لتناسب ظهور الأسماء بالكامل قبل الانتقال) -->
+  <!-- 3. الشاشة الأخيرة -->
   <div id="final-container" class="screen-container">
     <img src="https://files.catbox.moe/3e9448.jpeg" alt="Final Image">
 
@@ -332,6 +329,7 @@
     updateCountdown();
 
     function startSequence() {
+      // تشغيل الصوت فوراً عند الضغط لضمان عمله استجابة لحدث المستخدم
       const audio = document.getElementById('bg-audio');
       audio.play().catch(error => {
         console.log("Audio play prevented:", error);
@@ -344,7 +342,7 @@
       envelope.classList.remove('active');
       background.classList.add('active');
 
-      // تم زيادة وقت الانتقال إلى الشاشة الأخيرة ليمنح وقتاً كافياً لقراءة الاسم الثاني بالكامل
+      // الانتقال للشاشة الأخيرة بعد انتهاء عرض الأسماء بالكامل
       setTimeout(() => {
         background.classList.remove('active');
         finalContainer.classList.add('active');
