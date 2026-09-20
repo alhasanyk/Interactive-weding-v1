@@ -1,2 +1,359 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Wedding Invitation</title>
 
-hi
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Pinyon+Script&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #f7f4ef;
+      font-family: 'Cinzel', serif;
+    }
+
+    .screen-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f7f4ef;
+      overflow: hidden;
+    }
+
+    .screen-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      position: absolute;
+    }
+
+    #envelope-wrapper {
+      z-index: 9999;
+      cursor: pointer;
+      transition: opacity 1.5s ease, transform 1.5s ease;
+    }
+
+    .press-text {
+      position: absolute;
+      bottom: 8%;
+      z-index: 2;
+      color: #3b2a22;
+      font-family: 'Pinyon Script', cursive;
+      font-size: 1.8rem;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 8px rgba(255, 255, 255, 0.9);
+      animation: fadeInOut 2s infinite alternate;
+      text-align: center;
+      width: 100%;
+    }
+
+    @keyframes fadeInOut {
+      from { opacity: 0.5; }
+      to { opacity: 1; }
+    }
+
+    #main-background {
+      z-index: 1;
+    }
+
+    #couple-names {
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      opacity: 0;
+      transform: scale(0.9);
+      transition: opacity 1.2s ease, transform 1.2s ease;
+      padding: 0 20px;
+      width: 100%;
+    }
+
+    .name-top, .name-bottom {
+      font-family: 'Pinyon Script', cursive;
+      font-size: 2.8rem;
+      color: #3b2a22;
+      line-height: 1.1;
+    }
+
+    .name-and {
+      font-family: 'Pinyon Script', cursive;
+      font-size: 1.8rem;
+      color: #8c7365;
+      margin: 8px 0;
+      font-style: italic;
+    }
+
+    .show-names {
+      opacity: 1 !important;
+      transform: scale(1) !important;
+    }
+
+    #final-container {
+      z-index: 10;
+      opacity: 0;
+      transform: scale(1.02);
+      pointer-events: none;
+      transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1), transform 1.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .action-group {
+      position: absolute;
+      bottom: calc(85px + env(safe-area-inset-bottom, 0px));
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .location-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #332211;
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(2px);
+      transition: all 0.3s ease;
+    }
+
+    .location-btn svg {
+      width: 14px;
+      height: 14px;
+      fill: #332211;
+    }
+
+    .calendar-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.7);
+      color: #221100;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .calendar-btn svg {
+      width: 12px;
+      height: 12px;
+      fill: #221100;
+    }
+
+    .countdown-box {
+      position: absolute;
+      bottom: calc(30px + env(safe-area-inset-bottom, 0px));
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(2px);
+      border-radius: 10px;
+      padding: 4px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 210px;
+    }
+
+    .time-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+    }
+
+    .time-unit .number {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #000000;
+      line-height: 1;
+    }
+
+    .time-unit .label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.48rem;
+      font-weight: 600;
+      color: #333333;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+
+    .colon {
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: #000000;
+      margin-bottom: 6px;
+    }
+
+    .show-final {
+      opacity: 1 !important;
+      transform: scale(1) !important;
+      pointer-events: auto !important;
+    }
+
+    .fade-out {
+      opacity: 0 !important;
+      transform: scale(1.05);
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- عنصر الصوت المباشر -->
+  <audio id="bg-audio" loop>
+    <source src="https://files.catbox.moe/9rhkq4.mp3" type="audio/mp3">
+  </audio>
+
+  <!-- 1. شاشة الظرف الأولى -->
+  <div id="envelope-wrapper" class="screen-container" onclick="startSequence()">
+    <img src="https://files.catbox.moe/jcimle.jpeg" alt="Envelope">
+    <p class="press-text">Please press to open</p>
+  </div>
+
+  <!-- 2. شاشة الخلفية والأسماء الثانية -->
+  <div id="main-background" class="screen-container">
+    <img src="https://files.catbox.moe/mndbwr.jpeg" alt="Background">
+    <div id="couple-names">
+      <div class="name-top">Niggin Midi</div>
+      <div class="name-and">and</div>
+      <div class="name-bottom">Niger Hasooni</div>
+    </div>
+  </div>
+
+  <!-- 3. الشاشة الأخيرة -->
+  <div id="final-container" class="screen-container">
+    <img src="https://files.catbox.moe/r4e1yx.jpeg" alt="Final Image">
+
+    <div class="action-group">
+      <a href="https://maps.app.goo.gl/6wWBru4JgbSsMHRZ7?g_st=ic" target="_blank" class="location-btn">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+        </svg>
+        LOCATION
+      </a>
+
+      <a class="calendar-btn" href="data:text/calendar;charset=utf-8;base64,QkVHSU46VkNBTEVOREFSDQpWRVJTSU9OOjIuMA0KUFJPRElEOi0vL1dlZGRpbmcgSW52aXRhdGlvbi8vRU4NCkNBTFNDQUxFOkdSRUdPUklBTg0KTUVUSE9EOlBVQkxJU0gNCkJFR0lOOlZFVkVOVA0KVUlEOndlZGRpbmctbmlnZ2luLW5pZ2VyLTIwMjZAaW52aXRhdGlvbg0KRFRTVEFNUDoyMDI2MDEwMVQwMDAwMDBaDQpEVFNUQVJUOjIwMjYwOTI1VDAyMDAwMFoNCkRURU5EOjIwMjYwOTI1VDA1MDAwMFoNClNVTU1BUlk6V2VkZGluZyBDZWxlYnJhdGlvbiAtIE5pZ2dpbiAmIE5pZ2VyDQpMT0NBVElPTjpNYWtrYWgNCkRFU0NSSVBUSU9OOldlIGFyZSBob25vcmVkIHRvIGhhdmUgeW91IGpvaW4gdXMgb24gb3VyIHNwZWNpYWwgZGF5IQ0KRU5EOlZFVkVOVA0KRU5EOlZDQUxFTkRBUg0K">
+        <svg viewBox="0 0 24 24">
+          <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z"/>
+        </svg>
+        ADD TO CALENDAR
+      </a>
+    </div>
+
+    <div class="countdown-box">
+      <div class="time-unit">
+        <span class="number" id="days">00</span>
+        <span class="label">DAYS</span>
+      </div>
+      <span class="colon">:</span>
+      <div class="time-unit">
+        <span class="number" id="hours">00</span>
+        <span class="label">HRS</span>
+      </div>
+      <span class="colon">:</span>
+      <div class="time-unit">
+        <span class="number" id="minutes">00</span>
+        <span class="label">MIN</span>
+      </div>
+      <span class="colon">:</span>
+      <div class="time-unit">
+        <span class="number" id="seconds">00</span>
+        <span class="label">SEC</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const eventDate = new Date("2026-09-25T05:00:00").getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const difference = eventDate - now;
+
+      if (difference > 0) {
+        const d = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((difference % (1000 * 60)) / 1000);
+
+        document.getElementById("days").innerText = d < 10 ? "0" + d : d;
+        document.getElementById("hours").innerText = h < 10 ? "0" + h : h;
+        document.getElementById("minutes").innerText = m < 10 ? "0" + m : m;
+        document.getElementById("seconds").innerText = s < 10 ? "0" + s : s;
+      }
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    function startSequence() {
+      // تشغيل الصوت المباشر فور النقر على الظرف
+      const audio = document.getElementById('bg-audio');
+      audio.play().catch(error => {
+        console.log("Audio play prevented:", error);
+      });
+
+      const envelope = document.getElementById('envelope-wrapper');
+      const names = document.getElementById('couple-names');
+      const finalContainer = document.getElementById('final-container');
+
+      envelope.classList.add('fade-out');
+
+      setTimeout(() => {
+        envelope.style.display = 'none';
+        names.classList.add('show-names');
+
+        setTimeout(() => {
+          names.classList.remove('show-names');
+          names.classList.add('fade-out');
+
+          finalContainer.classList.add('show-final');
+        }, 3500);
+
+      }, 1000);
+    }
+  </script>
+
+</body>
+</html>
