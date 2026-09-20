@@ -94,19 +94,49 @@
       width: 100%;
     }
 
-    .name-top, .name-bottom {
+    /* خصائص ظهور الأسماء بالتتابع */
+    .name-top, .name-bottom, .name-and {
       font-family: 'Pinyon Script', cursive;
-      font-size: 2.8rem;
       color: #3b2a22;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .name-top {
+      font-size: 2.8rem;
       line-height: 1.1;
     }
 
     .name-and {
-      font-family: 'Pinyon Script', cursive;
       font-size: 1.8rem;
       color: #8c7365;
       margin: 8px 0;
       font-style: italic;
+      transition-delay: 0.5s; /* تظهر كلمة و (and) بعد الاسم الأول بفترة بسيطة أو مع الثاني حسب رغبتك */
+    }
+
+    .name-bottom {
+      font-size: 2.8rem;
+      line-height: 1.1;
+    }
+
+    /* عند تفعيل الشاشة الثانية يبدأ ظهور العناصر المتتابع */
+    #main-background.active .name-top {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #main-background.active .name-and {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 1.2s; /* ظهور كلمة و */
+    }
+
+    #main-background.active .name-bottom {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 2.2s; /* ظهور الاسم الثاني بعد الأول بمدة مطابقة للطلب (حوالي 1.5 ثانية بعد الأول) */
     }
 
     #final-container {
@@ -230,7 +260,7 @@
     <p class="press-text">Please press to open</p>
   </div>
 
-  <!-- 2. شاشة الخلفية والأسماء الثانية -->
+  <!-- 2. شاشة الخلفية والأسماء المتتابعة -->
   <div id="main-background" class="screen-container">
     <img src="https://files.catbox.moe/mndbwr.jpeg" alt="Background">
     <div id="couple-names">
@@ -240,7 +270,7 @@
     </div>
   </div>
 
-  <!-- 3. الشاشة الأخيرة (تم تحديث الرابط هنا) -->
+  <!-- 3. الشاشة الأخيرة -->
   <div id="final-container" class="screen-container">
     <img src="https://files.catbox.moe/3e9448.jpeg" alt="Final Image">
 
@@ -322,7 +352,7 @@
       setTimeout(() => {
         background.classList.remove('active');
         finalContainer.classList.add('active');
-      }, 3500);
+      }, 4200); // زدت وقت الشاشة الثانية قليلاً لتلحق بقراءة الاسم الثاني بوضوح
     }
   </script>
 
