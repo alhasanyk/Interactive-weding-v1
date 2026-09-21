@@ -60,8 +60,34 @@
     }
 
     #envelope-wrapper {
-      cursor: pointer;
       z-index: 99;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #000;
+    }
+
+    /* زر البداية الفخم (Press) */
+    #playBtn {
+      position: absolute;
+      z-index: 9999;
+      background: rgba(20, 20, 20, 0.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      font-size: 18px;
+      font-family: 'Cinzel', serif;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 14px 32px;
+      border-radius: 40px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      transition: opacity 0.4s ease, transform 0.2s ease;
+    }
+
+    #playBtn:active {
+      transform: scale(0.95);
     }
 
     .envelope-box {
@@ -72,31 +98,6 @@
       justify-content: center;
       align-items: center;
       overflow: hidden;
-    }
-
-    .press-text {
-      position: absolute;
-      bottom: 8%;
-      z-index: 4;
-      color: #3b2a22;
-      font-family: 'Pinyon Script', cursive;
-      font-size: 1.8rem;
-      letter-spacing: 1px;
-      text-shadow: 0 2px 8px rgba(255, 255, 255, 0.9);
-      text-align: center;
-      width: 100%;
-      opacity: 0;
-      transition: opacity 0.6s ease;
-    }
-
-    .press-text.show {
-      opacity: 1;
-      animation: fadeInOut 2s infinite alternate;
-    }
-
-    @keyframes fadeInOut {
-      from { opacity: 0.5; }
-      to { opacity: 1; }
     }
 
     #couple-names {
@@ -110,7 +111,7 @@
       width: 100%;
     }
 
-    /* تأثير الخروج الفخم من المنتصف/العمق */
+    /* تأثير الخروج الفخم للأسماء */
     .name-top, .name-bottom, .name-and {
       font-family: 'Pinyon Script', cursive;
       color: #3b2a22;
@@ -255,16 +256,11 @@
 </head>
 <body>
 
-  <!-- عنصر الصوت الخلفي -->
-  <audio id="bg-audio" preload="auto" loop>
-    <source src="https://files.catbox.moe/9rhkq4.mp3" type="audio/mp3">
-  </audio>
-
-  <!-- 1. شاشة الظرف (فيديو) -->
-  <div id="envelope-wrapper" class="screen-container active" onclick="startSequence()">
+  <!-- 1. شاشة الظرف والفيديو مع زر Press -->
+  <div id="envelope-wrapper" class="screen-container active">
+    <button id="playBtn">PRESS</button>
     <div class="envelope-box">
-      <video id="envelope-video" src="https://files.catbox.moe/qknz0f.mp4" playsinline preload="auto"></video>
-      <p class="press-text" id="pressText">Please press to open</p>
+      <video id="envelope-video" src="https://files.catbox.moe/qknz0f.mp4" muted playsinline webkit-playsinline preload="auto"></video>
     </div>
   </div>
 
@@ -322,16 +318,6 @@
   </div>
 
   <script>
-    let isStarted = false;
-
-    // إظهار جملة "Please press to open" بعد 3 ثوانٍ
-    setTimeout(() => {
-      const pressText = document.getElementById('pressText');
-      if (pressText && !isStarted) {
-        pressText.classList.add('show');
-      }
-    }, 3000);
-
     const eventDate = new Date("2026-09-25T05:00:00").getTime();
 
     function updateCountdown() {
@@ -389,50 +375,49 @@
       URL.revokeObjectURL(downloadUrl);
     }
 
-    function startSequence() {
-      if (isStarted) return;
-      isStarted = true;
+    const video = document.getElementById('envelope-video');
+    const playBtn = document.getElementById('playBtn');
 
-      // إخفاء جملة اضغط فوراً
-      const pressText = document.getElementById('pressText');
-      if (pressText) pressText.classList.remove('show');
+    // عند النقر على زر PRESS، يتم إخفاؤه وتشغيل الفيديو بسلاسة
+    playBtn.addEventListener('click', () => {
+      playBtn.style.opacity = '0';
+      setTimeout(() => playBtn.style.display = 'none', 400);
 
-      // تشغيل الصوت والفيديو معاً مباشرة في نفس لحظة النقر
-      const audio = document.getElementById('bg-audio');
-      const video = document.getElementById('envelope-video');
+      video.play().catch(error => {
+        console.log("خطأ في التشغيل:", error);
+        playBtn.style.display = 'block';
+        playBtn.style.opacity = '1';
+      });
+    });
 
-      audio.play().catch(e => console.log("Audio error:", e));
-      video.play().catch(e => console.log("Video error:", e));
+    // فور انتهاء الفيديو، ينتقل تلقائياً لصفحة الأسماء بتأثيراتها
+    video.addEventListener('ended', () => {
+      const envelope = document.getElementById('envelope-wrapper');
+      const background = document.getElementById('main-background');
+      const finalContainer = document.getElementById('final-container');
 
-      // عندما ينتهي الفيديو، ينتقل لشاشة الأسماء
-      video.onended = function() {
-        const envelope = document.getElementById('envelope-wrapper');
-        const background = document.getElementById('main-background');
-        const finalContainer = document.getElementById('final-container');
+      envelope.classList.remove('active');
+      background.classList.add('active');
 
-        envelope.classList.remove('active');
-        background.classList.add('active');
+      // ظهور الاسم الأول
+      document.getElementById('n1').classList.add('show');
 
-        // ظهور الاسم الأول
-        document.getElementById('n1').classList.add('show');
+      // بعد ثانيتين، يظهر "and"
+      setTimeout(() => {
+        document.getElementById('n2').classList.add('show');
+      }, 2000);
 
-        // بعد ثانيتين، يظهر "and"
-        setTimeout(() => {
-          document.getElementById('n2').classList.add('show');
-        }, 2000);
+      // بعد ثانيتين أخريين، يظهر الاسم الثاني
+      setTimeout(() => {
+        document.getElementById('n3').classList.add('show');
+      }, 4000);
 
-        // بعد ثانيتين أخريين (إجمالي 4 ثوانٍ)، يظهر الاسم الثاني
-        setTimeout(() => {
-          document.getElementById('n3').classList.add('show');
-        }, 4000);
-
-        // الانتقال للصورة الأخيرة بعد الأوقات المحددة
-        setTimeout(() => {
-          background.classList.remove('active');
-          finalContainer.classList.add('active');
-        }, 7700);
-      };
-    }
+      // الانتقال للشاشة الأخيرة
+      setTimeout(() => {
+        background.classList.remove('active');
+        finalContainer.classList.add('active');
+      }, 7700);
+    });
   </script>
 
 </body>
