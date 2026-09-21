@@ -2,30 +2,74 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دعوة زواج</title>
-    <!-- استيراد الخط الأنيق لأسماء العرسان وكلمة press -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>دعوة زواج - Niggin & Niger</title>
+    
+    <!-- خطوط الأنيقة -->
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Pinyon+Script&display=swap" rel="stylesheet">
+
     <style>
-        body {
+        * {
             margin: 0;
-            height: 100vh;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
             background-color: #000;
+            overflow: hidden;
+            font-family: 'Cinzel', serif;
+        }
+
+        /* نظام الشاشات (الصفحات المتتالية) */
+        .screen-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-            position: relative;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease;
+            background-color: #f7f4ef;
         }
-        /* إظهار صورة الختم كخلفية ثابتة في البداية لتجنب أي شاشة سوداء */
-        video {
+
+        .screen-page.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* شاشة الفيديو الأولى */
+        #video-page {
+            background-color: #000;
+        }
+
+        video, img {
             width: 100%;
             height: 100%;
+            object-fit: cover;
+            position: absolute;
+        }
+
+        #video-page video {
             object-fit: contain;
             background: url('IMG_0048.jpeg') no-repeat center center;
             background-size: contain;
         }
-        /* تصميم زر الختم الدائري الشفاف والمضبوط بدقة فوق الختم */
+
+        /* زر الختم الدائري الشفاف الخاص بك */
         #playBtn {
             position: absolute;
             top: 53.5%; 
@@ -34,13 +78,13 @@
             z-index: 9999;
             width: 105px;  
             height: 105px;
-            background: transparent; /* خلفية شفافة تماماً للختم */
-            border: 2px solid rgba(245, 235, 220, 0.75); /* إطار دائري بلون الختم */
+            background: transparent;
+            border: 2px solid rgba(245, 235, 220, 0.75);
             color: #fcf8f2;
             font-size: 32px; 
-            font-family: 'Great Vibes', cursive; /* الخط الأنيق */
+            font-family: 'Great Vibes', cursive;
             letter-spacing: 1px;
-            border-radius: 50%; /* دائري تماماً */
+            border-radius: 50%;
             cursor: pointer;
             display: flex;
             justify-content: center;
@@ -54,34 +98,273 @@
         #playBtn:active {
             transform: translate(-50%, -50%) scale(0.95);
         }
+
+        /* شاشة الأسماء وتأثيرات الظهور الفخمة */
+        #couple-names {
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        .name-top, .name-bottom, .name-and {
+            font-family: 'Pinyon Script', cursive;
+            color: #3b2a22;
+            opacity: 0;
+            transform: scale(0.6);
+            filter: blur(8px);
+            transition: opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1), 
+                        transform 1.2s cubic-bezier(0.25, 1, 0.5, 1), 
+                        filter 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .name-top {
+            font-size: 2.8rem;
+            line-height: 1.1;
+        }
+
+        .name-and {
+            font-size: 2rem;
+            color: #7a6558;
+            margin: 6px 0;
+            letter-spacing: 2px;
+        }
+
+        .name-bottom {
+            font-size: 2.8rem;
+            line-height: 1.1;
+        }
+
+        .name-top.show, .name-and.show, .name-bottom.show {
+            opacity: 1;
+            transform: scale(1);
+            filter: blur(0px);
+        }
+
+        /* الشاشة الأخيرة (الأزرار والعداد) */
+        .action-group {
+            position: absolute;
+            bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .location-btn, .calendar-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #332211;
+            text-decoration: none;
+            font-family: 'Cinzel', serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            background: transparent;
+            border: 1px solid rgba(51, 34, 17, 0.3);
+            backdrop-filter: blur(2px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .location-btn svg, .calendar-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: #332211;
+        }
+
+        .countdown-box {
+            position: absolute;
+            bottom: calc(48px + env(safe-area-inset-bottom, 0px));
+            z-index: 2;
+            background: transparent;
+            border-radius: 10px;
+            padding: 4px 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 210px;
+        }
+
+        .time-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+        }
+
+        .time-unit .number {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #3b2a22;
+            line-height: 1;
+        }
+
+        .time-unit .label {
+            font-family: 'Cinzel', serif;
+            font-size: 0.48rem;
+            font-weight: 600;
+            color: #554433;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+
+        .colon {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #3b2a22;
+            margin-bottom: 6px;
+        }
     </style>
 </head>
 <body>
 
-    <!-- زر الختم الدائري الشفاف -->
-    <button id="playBtn">press</button>
+    <!-- 1. شاشة الفيديو الأولى وزر الختم -->
+    <div id="video-page" class="screen-page active">
+        <button id="playBtn">press</button>
+        <video id="myVideo" src="2026-09-21 17:15:00.mov" playsinline webkit-playsinline preload="auto"></video>
+    </div>
 
-    <!-- الفيديو والصوت بالاسم العربي مع الترميز الآمن للمتصفحات -->
-    <video id="myVideo" src="2026-09-21 17:15:00.mov" playsinline webkit-playsinline preload="auto"></video>
+    <!-- 2. شاشة الأسماء -->
+    <div id="names-page" class="screen-page">
+        <img src="https://files.catbox.moe/mndbwr.jpeg" alt="Background">
+        <div id="couple-names">
+            <div class="name-top" id="n1">Niggin Midi</div>
+            <div class="name-and" id="n2">and</div>
+            <div class="name-bottom" id="n3">Niger Hasooni</div>
+        </div>
+    </div>
+
+    <!-- 3. الشاشة الأخيرة (التفاصيل، الموقع، التقويم، والعداد) -->
+    <div id="final-page" class="screen-page">
+        <img src="https://files.catbox.moe/3e9448.jpeg" alt="Final Image">
+
+        <div class="action-group">
+            <a href="https://maps.app.goo.gl/6wWBru4JgbSsMHRZ7?g_st=ic" target="_blank" class="location-btn">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+                LOCATION
+            </a>
+
+            <button class="calendar-btn" onclick="addToCalendar()">
+                <svg viewBox="0 0 24 24">
+                    <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z"/>
+                </svg>
+                ADD TO CALENDAR
+            </button>
+        </div>
+
+        <div class="countdown-box">
+            <div class="time-unit">
+                <span class="number" id="days">00</span>
+                <span class="label">DAYS</span>
+            </div>
+            <span class="colon">:</span>
+            <div class="time-unit">
+                <span class="number" id="hours">00</span>
+                <span class="label">HRS</span>
+            </div>
+            <span class="colon">:</span>
+            <div class="time-unit">
+                <span class="number" id="minutes">00</span>
+                <span class="label">MIN</span>
+            </div>
+            <span class="colon">:</span>
+            <div class="time-unit">
+                <span class="number" id="seconds">00</span>
+                <span class="label">SEC</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- الصوت الخارجي الذي يعمل بعد انتهاء الفيديو -->
     <audio id="myAudio" src="%D9%86%D8%B4%D9%8A%D8%AF%20%D8%B2%D9%88%D8%A7%D8%AC.mp3" preload="auto"></audio>
 
     <script>
+        // إعداد العداد التنازلي
+        const eventDate = new Date("2026-09-25T05:00:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const difference = eventDate - now;
+
+            if (difference > 0) {
+                const d = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((difference % (1000 * 60)) / 1000);
+
+                document.getElementById("days").innerText = d < 10 ? "0" + d : d;
+                document.getElementById("hours").innerText = h < 10 ? "0" + h : h;
+                document.getElementById("minutes").innerText = m < 10 ? "0" + m : m;
+                document.getElementById("seconds").innerText = s < 10 ? "0" + s : s;
+            }
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // دالة إضافة الحدث للتقويم
+        function addToCalendar() {
+            const title = "Wedding Celebration - Niggin & Niger";
+            const location = "Makkah";
+            const description = "We are honored to have you join our special day!";
+            const startTime = "20260925T020000Z";
+            const endTime = "20260925T050000Z";
+
+            const icsLines = [
+                "BEGIN:VCALENDAR",
+                "VERSION:2.0",
+                "PRODID:-//Wedding Invitation//EN",
+                "BEGIN:VEVENT",
+                "UID:" + Date.now() + "@wedding.invitation",
+                "DTSTAMP:" + new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z",
+                "DTSTART:" + startTime,
+                "DTEND:" + endTime,
+                "SUMMARY:" + title,
+                "DESCRIPTION:" + description,
+                "LOCATION:" + location,
+                "END:VEVENT",
+                "END:VCALENDAR"
+            ];
+
+            const icsBlob = new Blob([icsLines.join("\r\n")], { type: "text/calendar;charset=utf-8" });
+            const downloadUrl = URL.createObjectURL(icsBlob);
+            
+            const anchor = document.createElement("a");
+            anchor.href = downloadUrl;
+            anchor.setAttribute("download", "wedding-invitation.ics");
+            document.body.appendChild(anchor);
+            anchor.click();
+            document.body.removeChild(anchor);
+            URL.revokeObjectURL(downloadUrl);
+        }
+
         const video = document.getElementById('myVideo');
         const audio = document.getElementById('myAudio');
         const playBtn = document.getElementById('playBtn');
+        const videoPage = document.getElementById('video-page');
+        const namesPage = document.getElementById('names-page');
+        const finalPage = document.getElementById('final-page');
 
+        // تفاعل زر الختم (Press)
         playBtn.addEventListener('click', () => {
-            // إخفاء الزر بسلاسة عند النقر
             playBtn.style.opacity = '0';
             setTimeout(() => playBtn.style.display = 'none', 300);
 
-            // قص أول 5 ثواني من الفيديو
+            // تخطي أول 5 ثواني كما طلبت
             video.currentTime = 5;
 
-            // ضبط صوت الفيديو على الحد الأقصى (100%) ليكون واضحاً وقوياً
-            video.volume = 1.0;
-
-            // تشغيل الفيديو فوراً عند الضغط
             video.play().catch(error => {
                 console.log("خطأ في تشغيل الفيديو:", error);
                 playBtn.style.display = 'flex';
@@ -89,23 +372,28 @@
             });
         });
 
-        // تشغيل النشيد تلقائياً بعد انتهاء الفيديو بتدرج بطيء جداً وصوت منخفض جداً كخلفية (Fade-in خافت)
+        // عند انتهاء الفيديو تماماً، يتم تشغيل الصوت الانتقالي والانتقال لصفحة الأسماء
         video.addEventListener('ended', () => {
-            audio.volume = 0.0; // البدء من الصفر تماماً
-            audio.play().then(() => {
-                // تدرج بطيء جداً، والحد الأقصى للصوت منخفض جداً (5% فقط ليكون كأنه همس في الخلفية)
-                let fadeAudio = setInterval(() => {
-                    if (audio.volume < 0.05) {
-                        audio.volume = Math.min(audio.volume + 0.005, 0.05);
-                    } else {
-                        clearInterval(fadeAudio);
-                    }
-                }, 500); // زيادة بطيئة جداً كل نصف ثانية لنعومة فائقة
-            }).catch(error => {
+            // تشغيل الصوت الخارجي
+            audio.play().catch(error => {
                 console.log("خطأ في تشغيل الصوت:", error);
             });
+
+            // الانتقال لصفحة الأسماء
+            videoPage.classList.remove('active');
+            namesPage.classList.add('active');
+
+            // تسلسل ظهور الأسماء بجمالية تامة
+            setTimeout(() => document.getElementById('n1').classList.add('show'), 300);
+            setTimeout(() => document.getElementById('n2').classList.add('show'), 2000);
+            setTimeout(() => document.getElementById('n3').classList.add('show'), 4000);
+
+            // الانتقال للشاشة الأخيرة بعد عرض الأسماء
+            setTimeout(() => {
+                namesPage.classList.remove('active');
+                finalPage.classList.add('active');
+            }, 7500);
         });
     </script>
-
 </body>
 </html>
