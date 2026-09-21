@@ -43,7 +43,7 @@
       overflow: hidden;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 1.2s ease;
+      transition: opacity 0.8s ease;
     }
 
     .screen-container.active {
@@ -51,8 +51,7 @@
       pointer-events: auto;
     }
 
-    /* لملء الشاشة بالكامل وتغطيتها بدون فراغات */
-    .screen-container img {
+    .screen-container img, .screen-container video {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -65,18 +64,34 @@
       z-index: 99;
     }
 
+    .envelope-box {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
     .press-text {
       position: absolute;
       bottom: 8%;
-      z-index: 2;
+      z-index: 4;
       color: #3b2a22;
       font-family: 'Pinyon Script', cursive;
       font-size: 1.8rem;
       letter-spacing: 1px;
       text-shadow: 0 2px 8px rgba(255, 255, 255, 0.9);
-      animation: fadeInOut 2s infinite alternate;
       text-align: center;
       width: 100%;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    .press-text.show {
+      opacity: 1;
+      animation: fadeInOut 2s infinite alternate;
     }
 
     @keyframes fadeInOut {
@@ -95,46 +110,45 @@
       width: 100%;
     }
 
+    /* تأثير الخروج الفخم من المنتصف/العمق */
     .name-top, .name-bottom, .name-and {
       font-family: 'Pinyon Script', cursive;
       color: #3b2a22;
       opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 1s ease, transform 1s ease;
+      transform: scale(0.6);
+      filter: blur(8px);
+      transition: opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1), 
+                  transform 1.2s cubic-bezier(0.25, 1, 0.5, 1), 
+                  filter 1.2s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
     .name-top {
       font-size: 2.8rem;
       line-height: 1.1;
-      transition-delay: 1.5s;
     }
 
     .name-and {
       font-size: 2rem;
       color: #7a6558;
       margin: 6px 0;
-      letter-spacing: 1px;
-      transition-delay: 2.5s;
+      letter-spacing: 2px;
     }
 
     .name-bottom {
       font-size: 2.8rem;
       line-height: 1.1;
-      transition-delay: 3.5s;
     }
 
-    #main-background.active .name-top,
-    #main-background.active .name-and,
-    #main-background.active .name-bottom {
+    .name-top.show, .name-and.show, .name-bottom.show {
       opacity: 1;
-      transform: translateY(0);
+      transform: scale(1);
+      filter: blur(0px);
     }
 
     #final-container {
       z-index: 10;
     }
 
-    /* وزن أزرار اللوكيشن والكاليندر لتصبح في المنتصف تماماً بمسافات متساوية */
     .action-group {
       position: absolute;
       bottom: calc(96px + env(safe-area-inset-bottom, 0px));
@@ -145,7 +159,6 @@
       gap: 10px;
     }
 
-    /* خلفية شفافة تماماً للأزرار */
     .location-btn {
       display: flex;
       align-items: center;
@@ -194,7 +207,6 @@
       fill: #221100;
     }
 
-    /* التايمر في مكانه المرفوع الموزون */
     .countdown-box {
       position: absolute;
       bottom: calc(48px + env(safe-area-inset-bottom, 0px));
@@ -243,24 +255,26 @@
 </head>
 <body>
 
-  <!-- عنصر الصوت المباشر -->
+  <!-- عنصر الصوت الخلفي -->
   <audio id="bg-audio" preload="auto" loop>
     <source src="https://files.catbox.moe/9rhkq4.mp3" type="audio/mp3">
   </audio>
 
-  <!-- 1. شاشة الظرف الأولى -->
+  <!-- 1. شاشة الظرف (فيديو) -->
   <div id="envelope-wrapper" class="screen-container active" onclick="startSequence()">
-    <img src="https://files.catbox.moe/jcimle.jpeg" alt="Envelope">
-    <p class="press-text">Please press to open</p>
+    <div class="envelope-box">
+      <video id="envelope-video" src="https://files.catbox.moe/qknz0f.mp4" playsinline preload="auto"></video>
+      <p class="press-text" id="pressText">Please press to open</p>
+    </div>
   </div>
 
   <!-- 2. شاشة الخلفية والأسماء -->
   <div id="main-background" class="screen-container">
     <img src="https://files.catbox.moe/mndbwr.jpeg" alt="Background">
     <div id="couple-names">
-      <div class="name-top">Niggin Midi</div>
-      <div class="name-and">and</div>
-      <div class="name-bottom">Niger Hasooni</div>
+      <div class="name-top" id="n1">Niggin Midi</div>
+      <div class="name-and" id="n2">and</div>
+      <div class="name-bottom" id="n3">Niger Hasooni</div>
     </div>
   </div>
 
@@ -276,7 +290,6 @@
         LOCATION
       </a>
 
-      <!-- زر التقويم التفاعلي بخلفية شفافة -->
       <button class="calendar-btn" onclick="addToCalendar()">
         <svg viewBox="0 0 24 24">
           <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z"/>
@@ -309,6 +322,16 @@
   </div>
 
   <script>
+    let isStarted = false;
+
+    // إظهار جملة "Please press to open" بعد 3 ثوانٍ
+    setTimeout(() => {
+      const pressText = document.getElementById('pressText');
+      if (pressText && !isStarted) {
+        pressText.classList.add('show');
+      }
+    }, 3000);
+
     const eventDate = new Date("2026-09-25T05:00:00").getTime();
 
     function updateCountdown() {
@@ -331,7 +354,6 @@
     setInterval(updateCountdown, 1000);
     updateCountdown();
 
-    // دالة إنشاء وإضافة الحدث إلى تقويم الهاتف فعلياً
     function addToCalendar() {
       const title = "Wedding Celebration - Niggin & Niger";
       const location = "Makkah";
@@ -368,22 +390,48 @@
     }
 
     function startSequence() {
+      if (isStarted) return;
+      isStarted = true;
+
+      // إخفاء جملة اضغط فوراً
+      const pressText = document.getElementById('pressText');
+      if (pressText) pressText.classList.remove('show');
+
+      // تشغيل الصوت والفيديو معاً مباشرة في نفس لحظة النقر
       const audio = document.getElementById('bg-audio');
-      audio.play().catch(error => {
-        console.log("Audio play prevented:", error);
-      });
+      const video = document.getElementById('envelope-video');
 
-      const envelope = document.getElementById('envelope-wrapper');
-      const background = document.getElementById('main-background');
-      const finalContainer = document.getElementById('final-container');
+      audio.play().catch(e => console.log("Audio error:", e));
+      video.play().catch(e => console.log("Video error:", e));
 
-      envelope.classList.remove('active');
-      background.classList.add('active');
+      // عندما ينتهي الفيديو، ينتقل لشاشة الأسماء
+      video.onended = function() {
+        const envelope = document.getElementById('envelope-wrapper');
+        const background = document.getElementById('main-background');
+        const finalContainer = document.getElementById('final-container');
 
-      setTimeout(() => {
-        background.classList.remove('active');
-        finalContainer.classList.add('active');
-      }, 5500);
+        envelope.classList.remove('active');
+        background.classList.add('active');
+
+        // ظهور الاسم الأول
+        document.getElementById('n1').classList.add('show');
+
+        // بعد ثانيتين، يظهر "and"
+        setTimeout(() => {
+          document.getElementById('n2').classList.add('show');
+        }, 2000);
+
+        // بعد ثانيتين أخريين (إجمالي 4 ثوانٍ)، يظهر الاسم الثاني
+        setTimeout(() => {
+          document.getElementById('n3').classList.add('show');
+        }, 4000);
+
+        // الانتقال للصورة الأخيرة بعد الأوقات المحددة
+        setTimeout(() => {
+          background.classList.remove('active');
+          finalContainer.classList.add('active');
+        }, 7700);
+      };
     }
   </script>
 
