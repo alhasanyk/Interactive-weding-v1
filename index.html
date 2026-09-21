@@ -30,7 +30,7 @@
             font-family: 'Cinzel', serif;
         }
 
-        /* نظام الشاشات المتداخلة بسلاسة */
+        /* نظام الشاشات المتداخلة بسلاسة وبدون أي فواصل */
         .screen-page {
             position: fixed;
             top: 0;
@@ -62,11 +62,7 @@
         }
 
         #video-page {
-            background-color: #000;
-        }
-
-        #video-page video {
-            object-fit: cover; /* ملء الشاشة بالكامل وإزالة أي خطوط سوداء */
+            background-color: #f7f4ef; /* مطابق لخلفية الموقع تماماً لضمان عدم ظهور السواد */
         }
 
         /* زر الختم الدائري الشفاف (مضبوط بدقة فوق الختم) */
@@ -229,10 +225,10 @@
 </head>
 <body>
 
-    <!-- 1. شاشة الفيديو الأولى وزر الختم -->
+    <!-- 1. شاشة الفيديو الأولى مع وضع صورة غلاف (Poster) لتظهر نفس الخلفية تماماً -->
     <div id="video-page" class="screen-page active">
         <button id="playBtn">press</button>
-        <video id="myVideo" src="2026-09-21 17:15:00.mov" playsinline webkit-playsinline preload="auto"></video>
+        <video id="myVideo" src="2026-09-21 17:15:00.mov" poster="https://files.catbox.moe/mndbwr.jpeg" playsinline webkit-playsinline preload="auto"></video>
     </div>
 
     <!-- 2. شاشة الأسماء -->
