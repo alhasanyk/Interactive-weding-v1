@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تشغيل الفيديو والصوت</title>
-    <!-- استيراد خط أنيق يناسب أسماء العرسان -->
+    <!-- استيراد الخط الأنيق لأسماء العرسان -->
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
         body {
@@ -25,22 +25,22 @@
             background: url('IMG_0048.jpeg') no-repeat center center;
             background-size: contain;
         }
-        /* تصميم زر الختم الدائري الشفاف والمضبوط على مكان الختم في الصورة */
+        /* تصميم زر الختم الدائري الشفاف (مكبر ومنزل للأسفل ليطابق الختم تماماً) */
         #playBtn {
             position: absolute;
-            top: 50.5%; /* تعديل الارتفاع ليطابق مركز الختم تماماً */
-            left: 50.3%; /* تعديل المحاذاة الأفقية لتتمركز فوق الختم بدقة */
+            top: 53.5%; /* النزول أكثر للأسفل ليتمركز فوق الختم */
+            left: 50.2%; /* المحاذاة الأفقية الدقيقة */
             transform: translate(-50%, -50%);
             z-index: 9999;
-            width: 85px;  /* حجم دائري متناسق مع حجم الختم في الصورة */
-            height: 85px;
+            width: 105px;  /* تكبير حجم الدائرة لتناسب الختم الشمعي تماماً */
+            height: 105px;
             background: transparent; /* خلفية شفافة تماماً */
-            border: 2px solid rgba(245, 235, 220, 0.7); /* إطار دائري رقيق بلون الختم */
+            border: 2px solid rgba(245, 235, 220, 0.75); /* إطار دائري بلون الختم */
             color: #fcf8f2;
-            font-size: 26px;
+            font-size: 32px; /* تكبير خط كلمة press قليلاً ليتناسب مع الحجم الجديد */
             font-family: 'Great Vibes', cursive; /* الخط الأنيق */
             letter-spacing: 1px;
-            border-radius: 50%; /* شكل دائري تماماً مثل الختم */
+            border-radius: 50%; /* دائري تماماً */
             cursor: pointer;
             display: flex;
             justify-content: center;
@@ -49,7 +49,7 @@
             transition: 0.3s;
         }
         #playBtn:hover {
-            background: rgba(255, 255, 255, 0.1); /* تأثير خفيف جداً عند المرور */
+            background: rgba(255, 255, 255, 0.1);
         }
         #playBtn:active {
             transform: translate(-50%, -50%) scale(0.95);
@@ -58,7 +58,7 @@
 </head>
 <body>
 
-    <!-- زر الختم الدائري الشفاف في منتصف الختم تماماً -->
+    <!-- زر الختم الدائري الشفاف والمضبوط بدقة -->
     <button id="playBtn">press</button>
 
     <!-- الفيديو والصوت -->
