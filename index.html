@@ -25,12 +25,12 @@
         body, html {
             width: 100%;
             height: 100%;
-            background-color: #000;
+            background-color: #f7f4ef; /* توحيد لون الخلفية لمنع ظهور السواد تماماً */
             overflow: hidden;
             font-family: 'Cinzel', serif;
         }
 
-        /* نظام الشاشات (الصفحات المتتالية) */
+        /* نظام الشاشات المتداخلة بسلاسة بدون فواصل سوداء */
         .screen-page {
             position: fixed;
             top: 0;
@@ -42,18 +42,13 @@
             align-items: center;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.8s ease;
+            transition: opacity 1.2s ease-in-out; /* انتقال ناعم وطويل نسبياً لمنع الفواصل الحادة */
             background-color: #f7f4ef;
         }
 
         .screen-page.active {
             opacity: 1;
             pointer-events: auto;
-        }
-
-        /* شاشة الفيديو الأولى */
-        #video-page {
-            background-color: #000;
         }
 
         video, img {
@@ -63,13 +58,17 @@
             position: absolute;
         }
 
+        #video-page {
+            background-color: #000;
+        }
+
         #video-page video {
             object-fit: contain;
             background: url('IMG_0048.jpeg') no-repeat center center;
             background-size: contain;
         }
 
-        /* زر الختم الدائري الشفاف الخاص بك */
+        /* زر الختم الدائري الشفاف */
         #playBtn {
             position: absolute;
             top: 53.5%; 
@@ -168,7 +167,7 @@
             letter-spacing: 1.5px;
             padding: 6px 14px;
             border-radius: 20px;
-            background: transparent;
+            background: rgba(247, 244, 239, 0.8);
             border: 1px solid rgba(51, 34, 17, 0.3);
             backdrop-filter: blur(2px);
             transition: all 0.3s ease;
@@ -245,7 +244,7 @@
         </div>
     </div>
 
-    <!-- 3. الشاشة الأخيرة (التفاصيل، الموقع، التقويم، والعداد) -->
+    <!-- 3. الشاشة الأخيرة -->
     <div id="final-page" class="screen-page">
         <img src="https://files.catbox.moe/3e9448.jpeg" alt="Final Image">
 
@@ -288,11 +287,10 @@
         </div>
     </div>
 
-    <!-- الصوت الخارجي الذي يعمل بعد انتهاء الفيديو -->
+    <!-- الصوت الخارجي -->
     <audio id="myAudio" src="%D9%86%D8%B4%D9%8A%D8%AF%20%D8%B2%D9%88%D8%A7%D8%AC.mp3" preload="auto"></audio>
 
     <script>
-        // إعداد العداد التنازلي
         const eventDate = new Date("2026-09-25T05:00:00").getTime();
 
         function updateCountdown() {
@@ -314,7 +312,6 @@
         setInterval(updateCountdown, 1000);
         updateCountdown();
 
-        // دالة إضافة الحدث للتقويم
         function addToCalendar() {
             const title = "Wedding Celebration - Niggin & Niger";
             const location = "Makkah";
@@ -357,12 +354,10 @@
         const namesPage = document.getElementById('names-page');
         const finalPage = document.getElementById('final-page');
 
-        // تفاعل زر الختم (Press)
         playBtn.addEventListener('click', () => {
             playBtn.style.opacity = '0';
             setTimeout(() => playBtn.style.display = 'none', 300);
 
-            // تخطي أول 5 ثواني كما طلبت
             video.currentTime = 5;
 
             video.play().catch(error => {
@@ -372,26 +367,28 @@
             });
         });
 
-        // عند انتهاء الفيديو تماماً، يتم تشغيل الصوت الانتقالي والانتقال لصفحة الأسماء
         video.addEventListener('ended', () => {
-            // تشغيل الصوت الخارجي
             audio.play().catch(error => {
                 console.log("خطأ في تشغيل الصوت:", error);
             });
 
-            // الانتقال لصفحة الأسماء
-            videoPage.classList.remove('active');
+            // تداخل ناعم جداً بدون أي شاشة سوداء
             namesPage.classList.add('active');
+            setTimeout(() => {
+                videoPage.classList.remove('active');
+            }, 600); // إخفاء الفيديو تدريجياً بعد بدء ظهور الصفحة الثانية
 
-            // تسلسل ظهور الأسماء بجمالية تامة
-            setTimeout(() => document.getElementById('n1').classList.add('show'), 300);
+            // ظهور الأسماء بالتسلسل
+            setTimeout(() => document.getElementById('n1').classList.add('show'), 400);
             setTimeout(() => document.getElementById('n2').classList.add('show'), 2000);
             setTimeout(() => document.getElementById('n3').classList.add('show'), 4000);
 
-            // الانتقال للشاشة الأخيرة بعد عرض الأسماء
+            // الانتقال للشاشة الثالثة بسلاسة تامة
             setTimeout(() => {
-                namesPage.classList.remove('active');
                 finalPage.classList.add('active');
+                setTimeout(() => {
+                    namesPage.classList.remove('active');
+                }, 600);
             }, 7500);
         });
     </script>
