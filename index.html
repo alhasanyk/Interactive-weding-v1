@@ -25,7 +25,7 @@
         body, html {
             width: 100%;
             height: 100%;
-            background-color: #000;
+            background-color: #f7f4ef;
             overflow: hidden;
             font-family: 'Cinzel', serif;
         }
@@ -43,7 +43,7 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 1.2s ease-in-out;
-            background-color: #000;
+            background-color: #f7f4ef;
         }
 
         .screen-page.active {
@@ -61,11 +61,22 @@
             left: 0;
         }
 
+        /* شاشة الفيديو الأولى: دمج الخلفية والفيديو معاً لمنع أي فاصل أو ومضة */
         #video-page {
-            background-color: #000; /* خلفية سوداء تمنع أي ومضة بيضاء عند بدء التشغيل */
+            background-color: #f7f4ef;
+        }
+        
+        #bg-image {
+            z-index: 1;
         }
 
-        /* زر الختم الدائري الشفاف (مضبوط بدقة فوق الختم) */
+        #myVideo {
+            z-index: 2;
+            opacity: 0; /* يبدأ الفيديو مخفياً تماماً وفوقه الصورة لضمان التطابق التام */
+            transition: opacity 0.5s ease;
+        }
+
+        /* زر الختم الدائري (يظهر بفيد خفيف بعد ثانية) */
         #playBtn {
             position: absolute;
             top: 53.5%; 
@@ -86,8 +97,14 @@
             justify-content: center;
             align-items: center;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            transition: 0.3s;
+            opacity: 0; /* يبدأ مخفياً للـ Fade-in */
+            transition: opacity 1s ease, transform 0.3s ease, background 0.3s;
         }
+
+        #playBtn.fade-in {
+            opacity: 1;
+        }
+
         #playBtn:hover {
             background: rgba(255, 255, 255, 0.1);
         }
@@ -95,7 +112,7 @@
             transform: translate(-50%, -50%) scale(0.95);
         }
 
-        /* شاشة الأسماء وتأثيرات الظهور الفخمة */
+        /* شاشة الأسماء (الصورة الثانية IMG_0042.jpeg) */
         #couple-names {
             z-index: 2;
             display: flex;
@@ -225,13 +242,14 @@
 </head>
 <body>
 
-    <!-- 1. شاشة الفيديو الأولى (الغلاف IMG_0048.jpeg) -->
+    <!-- 1. شاشة الفيديو الأولى: خلفية ثابتة تحت الفيديو تماماً لمنع أي ومضة -->
     <div id="video-page" class="screen-page active">
+        <img id="bg-image" src="IMG_0048.jpeg" alt="Background">
         <button id="playBtn">press</button>
-        <video id="myVideo" src="2026-09-21 17:15:00.mov" poster="IMG_0048.jpeg" playsinline webkit-playsinline preload="auto"></video>
+        <video id="myVideo" src="2026-09-21 17:15:00.mov" playsinline webkit-playsinline preload="auto"></video>
     </div>
 
-    <!-- 2. شاشة الأسماء (الصورة الجديدة IMG_0042.jpeg) -->
+    <!-- 2. شاشة الأسماء (الصورة الثانية IMG_0042.jpeg) -->
     <div id="names-page" class="screen-page">
         <img src="IMG_0042.jpeg" alt="Background">
         <div id="couple-names">
@@ -288,6 +306,13 @@
     <audio id="myAudio" src="%D9%86%D8%B4%D9%8A%D8%AF%20%D8%B2%D9%88%D8%A7%D8%AC.mp3" preload="auto"></audio>
 
     <script>
+        // ظهور زر "press" بفيد خفيف بعد ثانية واحدة من فتح الصفحة
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('playBtn').classList.add('fade-in');
+            }, 1000);
+        });
+
         const eventDate = new Date("2026-09-25T05:00:00").getTime();
 
         function updateCountdown() {
@@ -356,6 +381,7 @@
             setTimeout(() => playBtn.style.display = 'none', 300);
 
             video.currentTime = 5;
+            video.style.opacity = '1'; // إظهار الفيديو بسلاسة فوق الخلفية الثابتة
 
             video.play().catch(error => {
                 console.log("خطأ في تشغيل الفيديو:", error);
