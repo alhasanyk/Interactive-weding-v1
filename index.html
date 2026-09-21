@@ -20,7 +20,7 @@
             height: 100%;
             object-fit: contain;
         }
-        /* تصميم الزر بخلفية شفافة وتمركزه في منتصف الشاشة مع إزاحته قليلاً للأسفل */
+        /* تصميم الزر الشفاف بكلمة press في منتصف الشاشة */
         #playBtn {
             position: absolute;
             top: 55%;
@@ -50,11 +50,11 @@
 </head>
 <body>
 
-    <!-- الزر الشفاف بكلمة press في منتصف الشاشة -->
+    <!-- الزر الشفاف بكلمة press -->
     <button id="playBtn">press</button>
 
-    <!-- الفيديو المحلي المرفوع في المشروع -->
-    <video id="myVideo" src="2026-09-21 17:15:00.mp4" playsinline webkit-playsinline preload="auto"></video>
+    <!-- الفيديو مع وضع الصورة IMG_0048.jpeg كخلفية أولية -->
+    <video id="myVideo" src="2026-09-21 17:15:00.mp4" poster="IMG_0048.jpeg" playsinline webkit-playsinline preload="auto"></video>
     <audio id="myAudio" src="myAudio.mp3" preload="auto"></audio>
 
     <script>
@@ -67,7 +67,7 @@
             playBtn.style.opacity = '0';
             setTimeout(() => playBtn.style.display = 'none', 300);
 
-            // تشغيل الفيديو بسلاسة تامة بعد نقرة المستخدم المباشرة
+            // تشغيل الفيديو
             video.play().catch(error => {
                 console.log("خطأ في التشغيل:", error);
                 playBtn.style.display = 'block';
@@ -75,7 +75,7 @@
             });
         });
 
-        // فور انتهاء الفيديو تماماً، يبدأ الصوت الخارجي تلقائياً
+        // تشغيل الصوت بعد انتهاء الفيديو تماماً
         video.addEventListener('ended', () => {
             audio.play().catch(error => {
                 console.log("خطأ في تشغيل الصوت:", error);
