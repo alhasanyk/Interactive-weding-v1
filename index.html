@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تشغيل الفيديو والصوت</title>
-    <!-- استيراد خط أنيق وراقي يشبه خطوط الدعوات وأسماء العرسان -->
+    <!-- استيراد خط أنيق يناسب أسماء العرسان -->
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
         body {
@@ -17,7 +17,7 @@
             overflow: hidden;
             position: relative;
         }
-        /* إخفاء الفيديو في البداية وإظهار الصورة لتجنب أي وميض أسود */
+        /* إخفاء الفيديو في البداية وإظهار صورة الختم كخلفية ثابتة */
         video {
             width: 100%;
             height: 100%;
@@ -25,33 +25,31 @@
             background: url('IMG_0048.jpeg') no-repeat center center;
             background-size: contain;
         }
-        /* تصميم زر الختم الشمعي الدائري المخصص */
+        /* تصميم زر الختم الدائري الشفاف والمضبوط على مكان الختم في الصورة */
         #playBtn {
             position: absolute;
-            top: 48%; /* رفعه قليلاً للأعلى */
-            left: 53%; /* إزاحته جهة اليمين قليلاً */
+            top: 50.5%; /* تعديل الارتفاع ليطابق مركز الختم تماماً */
+            left: 50.3%; /* تعديل المحاذاة الأفقية لتتمركز فوق الختم بدقة */
             transform: translate(-50%, -50%);
             z-index: 9999;
-            width: 90px;  /* حجم دائري أصغر ومناسب */
-            height: 90px;
-            background: rgba(235, 225, 210, 0.15); /* إيحاء بلون الختم الشمعي الفاتح والشفاف */
-            backdrop-filter: blur(5px);
-            border: 2px solid rgba(245, 235, 220, 0.8); /* إطار أنيق بلون الختم */
+            width: 85px;  /* حجم دائري متناسق مع حجم الختم في الصورة */
+            height: 85px;
+            background: transparent; /* خلفية شفافة تماماً */
+            border: 2px solid rgba(245, 235, 220, 0.7); /* إطار دائري رقيق بلون الختم */
             color: #fcf8f2;
-            font-size: 26px; /* حجم الخط المتناسق مع الدائرة */
-            font-family: 'Great Vibes', cursive; /* خط أنيق يشبه خطوط أسماء العرسان */
+            font-size: 26px;
+            font-family: 'Great Vibes', cursive; /* الخط الأنيق */
             letter-spacing: 1px;
-            border-radius: 50%; /* جعل الزر دائرياً تماماً كشكل الختم */
+            border-radius: 50%; /* شكل دائري تماماً مثل الختم */
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             transition: 0.3s;
         }
         #playBtn:hover {
-            background: rgba(235, 225, 210, 0.3);
-            transform: translate(-50%, -50%) scale(1.05);
+            background: rgba(255, 255, 255, 0.1); /* تأثير خفيف جداً عند المرور */
         }
         #playBtn:active {
             transform: translate(-50%, -50%) scale(0.95);
@@ -60,7 +58,7 @@
 </head>
 <body>
 
-    <!-- زر الختم الدائري بكلمة press بالخط الأنيق -->
+    <!-- زر الختم الدائري الشفاف في منتصف الختم تماماً -->
     <button id="playBtn">press</button>
 
     <!-- الفيديو والصوت -->
