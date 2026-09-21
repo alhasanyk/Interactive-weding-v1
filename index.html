@@ -61,7 +61,7 @@
             left: 0;
         }
 
-        /* شاشة الفيديو الأولى: دمج الخلفية والفيديو معاً لمنع أي فاصل أو ومضة */
+        /* شاشة الفيديو الأولى: خلفية ثابتة تحت الفيديو تماماً لمنع أي ومضة */
         #video-page {
             background-color: #f7f4ef;
         }
@@ -158,6 +158,14 @@
             filter: blur(0px);
         }
 
+        /* كلاس لإخفاء الأسماء تماماً بسلاسة قبل الانتقال */
+        .name-top.hide, .name-and.hide, .name-bottom.hide {
+            opacity: 0;
+            transform: scale(0.6);
+            filter: blur(8px);
+            transition: opacity 1s ease, transform 1s ease, filter 1s ease;
+        }
+
         /* الشاشة الأخيرة (الأزرار والعداد) */
         .action-group {
             position: absolute;
@@ -242,14 +250,14 @@
 </head>
 <body>
 
-    <!-- 1. شاشة الفيديو الأولى: خلفية ثابتة تحت الفيديو تماماً لمنع أي ومضة -->
+    <!-- 1. شاشة الفيديو الأولى -->
     <div id="video-page" class="screen-page active">
         <img id="bg-image" src="IMG_0048.jpeg" alt="Background">
         <button id="playBtn">press</button>
         <video id="myVideo" src="2026-09-21 17:15:00.mov" playsinline webkit-playsinline preload="auto"></video>
     </div>
 
-    <!-- 2. شاشة الأسماء (الصورة الثانية IMG_0042.jpeg) -->
+    <!-- 2. شاشة الأسماء (IMG_0042.jpeg) -->
     <div id="names-page" class="screen-page">
         <img src="IMG_0042.jpeg" alt="Background">
         <div id="couple-names">
@@ -381,7 +389,7 @@
             setTimeout(() => playBtn.style.display = 'none', 300);
 
             video.currentTime = 5;
-            video.style.opacity = '1'; // إظهار الفيديو بسلاسة فوق الخلفية الثابتة
+            video.style.opacity = '1';
 
             video.play().catch(error => {
                 console.log("خطأ في تشغيل الفيديو:", error);
@@ -400,10 +408,19 @@
                 videoPage.classList.remove('active');
             }, 600);
 
+            // ظهور الأسماء بالتتابع
             setTimeout(() => document.getElementById('n1').classList.add('show'), 400);
             setTimeout(() => document.getElementById('n2').classList.add('show'), 2000);
             setTimeout(() => document.getElementById('n3').classList.add('show'), 4000);
 
+            // إخفاء الأسماء تماماً قبل الانتقال للشاشة الأخيرة
+            setTimeout(() => {
+                document.getElementById('n1').classList.add('hide');
+                document.getElementById('n2').classList.add('hide');
+                document.getElementById('n3').classList.add('hide');
+            }, 6500);
+
+            // إظهار الصفحة الأخيرة بعد اكتمال اختفاء الأسماء تماماً
             setTimeout(() => {
                 finalPage.classList.add('active');
                 setTimeout(() => {
