@@ -62,7 +62,7 @@
         }
 
         #video-page {
-            background-color: #f7f4ef; /* مطابق لخلفية الموقع تماماً لضمان عدم ظهور السواد */
+            background-color: #f7f4ef;
         }
 
         /* زر الختم الدائري الشفاف (مضبوط بدقة فوق الختم) */
@@ -225,15 +225,15 @@
 </head>
 <body>
 
-    <!-- 1. شاشة الفيديو الأولى مع وضع صورة غلاف (Poster) لتظهر نفس الخلفية تماماً -->
+    <!-- 1. شاشة الفيديو الأولى مع ربط الـ poster باسم الخلفية في GitHub -->
     <div id="video-page" class="screen-page active">
         <button id="playBtn">press</button>
-        <video id="myVideo" src="2026-09-21 17:15:00.mov" poster="https://files.catbox.moe/mndbwr.jpeg" playsinline webkit-playsinline preload="auto"></video>
+        <video id="myVideo" src="2026-09-21 17:15:00.mov" poster="IMG_0048.jpeg" playsinline webkit-playsinline preload="auto"></video>
     </div>
 
     <!-- 2. شاشة الأسماء -->
     <div id="names-page" class="screen-page">
-        <img src="https://files.catbox.moe/mndbwr.jpeg" alt="Background">
+        <img src="IMG_0048.jpeg" alt="Background">
         <div id="couple-names">
             <div class="name-top" id="n1">Niggin Midi</div>
             <div class="name-and" id="n2">and</div>
