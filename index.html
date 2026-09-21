@@ -30,7 +30,7 @@
             font-family: 'Cinzel', serif;
         }
 
-        /* نظام الشاشات المتداخلة بسلاسة وبدون أي فواصل سوداء */
+        /* نظام الشاشات المتداخلة بسلاسة */
         .screen-page {
             position: fixed;
             top: 0;
@@ -51,19 +51,25 @@
             pointer-events: auto;
         }
 
+        /* تنسيق عام للصور والفيديو ليملأ الشاشة بالكامل بدون خطوط سوداء */
         video, img {
             width: 100%;
-            height: 100vw; /* ضمان تغطية كاملة للشاشة */
-            min-height: 100vh;
-            object-fit: cover; /* ملء الشاشة بالكامل بدون خطوط سوداء */
+            height: 100%;
+            object-fit: cover;
             position: absolute;
+            top: 0;
+            left: 0;
         }
 
         #video-page {
-            background-color: #f7f4ef;
+            background-color: #000;
         }
 
-        /* زر الختم الدائري الشفاف (مضبوط بدقة) */
+        #video-page video {
+            object-fit: cover; /* ملء الشاشة بالكامل وإزالة أي خطوط سوداء */
+        }
+
+        /* زر الختم الدائري الشفاف (مضبوط بدقة فوق الختم) */
         #playBtn {
             position: absolute;
             top: 53.5%; 
