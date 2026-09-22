@@ -61,7 +61,7 @@
             left: 0;
         }
 
-        /* شاشة الفيديو الأولى: خلفية ثابتة تحت الفيديو تماماً لمنع أي ومضة */
+        /* شاشة الفيديو الأولى */
         #video-page {
             background-color: #f7f4ef;
         }
@@ -72,11 +72,11 @@
 
         #myVideo {
             z-index: 2;
-            opacity: 0; /* يبدأ الفيديو مخفياً تماماً وفوقه الصورة لضمان التطابق التام */
+            opacity: 0;
             transition: opacity 0.5s ease;
         }
 
-        /* زر الختم الدائري (يظهر بفيد خفيف بعد ثانية) */
+        /* زر الختم الدائري */
         #playBtn {
             position: absolute;
             top: 53.5%; 
@@ -97,7 +97,7 @@
             justify-content: center;
             align-items: center;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            opacity: 0; /* يبدأ مخفياً للـ Fade-in */
+            opacity: 0;
             transition: opacity 1s ease, transform 0.3s ease, background 0.3s;
         }
 
@@ -112,7 +112,7 @@
             transform: translate(-50%, -50%) scale(0.95);
         }
 
-        /* شاشة الأسماء (الصورة الثانية IMG_0042.jpeg) */
+        /* شاشة الأسماء (IMG_0042.jpeg) */
         #couple-names {
             z-index: 2;
             display: flex;
@@ -124,15 +124,16 @@
             width: 100%;
         }
 
+        /* تأثير كتابة الأسماء بحركات متسلسلة فخمة */
         .name-top, .name-bottom, .name-and {
             font-family: 'Pinyon Script', cursive;
             color: #3b2a22;
             opacity: 0;
-            transform: scale(0.6);
-            filter: blur(8px);
-            transition: opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1), 
-                        transform 1.2s cubic-bezier(0.25, 1, 0.5, 1), 
-                        filter 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+            margin: 0 auto;
+            transition: opacity 0.3s ease;
         }
 
         .name-top {
@@ -143,7 +144,7 @@
         .name-and {
             font-size: 2rem;
             color: #7a6558;
-            margin: 6px 0;
+            margin: 6px auto;
             letter-spacing: 2px;
         }
 
@@ -152,18 +153,33 @@
             line-height: 1.1;
         }
 
-        .name-top.show, .name-and.show, .name-bottom.show {
+        /* عند تفعيل الكتابة */
+        .name-top.typing {
             opacity: 1;
-            transform: scale(1);
-            filter: blur(0px);
+            animation: typingAnimation 1.8s steps(20, end) forwards;
         }
 
-        /* كلاس لإخفاء الأسماء تماماً بسلاسة قبل الانتقال */
+        .name-and.typing {
+            opacity: 1;
+            animation: typingAnimation 1s steps(10, end) forwards;
+        }
+
+        .name-bottom.typing {
+            opacity: 1;
+            animation: typingAnimation 1.8s steps(20, end) forwards;
+        }
+
+        @keyframes typingAnimation {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        /* تأثير الاختفاء التام قبل الانتقال للشاشة التالية */
         .name-top.hide, .name-and.hide, .name-bottom.hide {
             opacity: 0;
-            transform: scale(0.6);
-            filter: blur(8px);
-            transition: opacity 1s ease, transform 1s ease, filter 1s ease;
+            transform: scale(0.8);
+            filter: blur(6px);
+            transition: all 0.8s ease;
         }
 
         /* الشاشة الأخيرة (الأزرار والعداد) */
@@ -408,17 +424,17 @@
                 videoPage.classList.remove('active');
             }, 600);
 
-            // ظهور الأسماء بالتتابع
-            setTimeout(() => document.getElementById('n1').classList.add('show'), 400);
-            setTimeout(() => document.getElementById('n2').classList.add('show'), 2000);
-            setTimeout(() => document.getElementById('n3').classList.add('show'), 4000);
+            // كتابة الأسماء بالترتيب وكأنها تُرسم
+            setTimeout(() => document.getElementById('n1').classList.add('typing'), 400);
+            setTimeout(() => document.getElementById('n2').classList.add('typing'), 2400);
+            setTimeout(() => document.getElementById('n3').classList.add('typing'), 3600);
 
             // إخفاء الأسماء تماماً قبل الانتقال للشاشة الأخيرة
             setTimeout(() => {
                 document.getElementById('n1').classList.add('hide');
                 document.getElementById('n2').classList.add('hide');
                 document.getElementById('n3').classList.add('hide');
-            }, 6500);
+            }, 6800);
 
             // إظهار الصفحة الأخيرة بعد اكتمال اختفاء الأسماء تماماً
             setTimeout(() => {
@@ -426,7 +442,7 @@
                 setTimeout(() => {
                     namesPage.classList.remove('active');
                 }, 600);
-            }, 7500);
+            }, 7800);
         });
     </script>
 </body>
