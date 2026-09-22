@@ -124,16 +124,14 @@
             width: 100%;
         }
 
-        /* تأثير كتابة الأسماء بحركات متسلسلة فخمة */
+        /* تأثير كتابة خط اليد السلس من اليسار لليمين */
         .name-top, .name-bottom, .name-and {
             font-family: 'Pinyon Script', cursive;
             color: #3b2a22;
-            opacity: 0;
             white-space: nowrap;
-            overflow: hidden;
-            width: 0;
-            margin: 0 auto;
-            transition: opacity 0.3s ease;
+            /* يبدأ النص مخفياً بالكامل عبر القص من اليمين لليسار في RTL (أو عبر clip-path) */
+            clip-path: inset(0 100% 0 0);
+            transition: clip-path 2s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease, transform 0.8s ease, filter 0.8s ease;
         }
 
         .name-top {
@@ -153,32 +151,16 @@
             line-height: 1.1;
         }
 
-        /* عند تفعيل الكتابة */
-        .name-top.typing {
-            opacity: 1;
-            animation: typingAnimation 1.8s steps(20, end) forwards;
+        /* عند تفعيل الكتابة السلسة */
+        .name-top.writing, .name-and.writing, .name-bottom.writing {
+            clip-path: inset(0 0% 0 0);
         }
 
-        .name-and.typing {
-            opacity: 1;
-            animation: typingAnimation 1s steps(10, end) forwards;
-        }
-
-        .name-bottom.typing {
-            opacity: 1;
-            animation: typingAnimation 1.8s steps(20, end) forwards;
-        }
-
-        @keyframes typingAnimation {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-
-        /* تأثير الاختفاء التام قبل الانتقال للشاشة التالية */
+        /* تأثير الاختفاء التام بسلاسة قبل الانتقال */
         .name-top.hide, .name-and.hide, .name-bottom.hide {
             opacity: 0;
-            transform: scale(0.8);
-            filter: blur(6px);
+            transform: scale(0.9);
+            filter: blur(8px);
             transition: all 0.8s ease;
         }
 
@@ -424,25 +406,25 @@
                 videoPage.classList.remove('active');
             }, 600);
 
-            // كتابة الأسماء بالترتيب وكأنها تُرسم
-            setTimeout(() => document.getElementById('n1').classList.add('typing'), 400);
-            setTimeout(() => document.getElementById('n2').classList.add('typing'), 2400);
-            setTimeout(() => document.getElementById('n3').classList.add('typing'), 3600);
+            // انسيابية كتابة خط اليد بالترتيب من اليسار لليمين
+            setTimeout(() => document.getElementById('n1').classList.add('writing'), 400);
+            setTimeout(() => document.getElementById('n2').classList.add('writing'), 2200);
+            setTimeout(() => document.getElementById('n3').classList.add('writing'), 3200);
 
-            // إخفاء الأسماء تماماً قبل الانتقال للشاشة الأخيرة
+            // إخفاء الأسماء تماماً وبنعومة قبل الانتقال الشاشة الأخيرة
             setTimeout(() => {
                 document.getElementById('n1').classList.add('hide');
                 document.getElementById('n2').classList.add('hide');
                 document.getElementById('n3').classList.add('hide');
-            }, 6800);
+            }, 6500);
 
-            // إظهار الصفحة الأخيرة بعد اكتمال اختفاء الأسماء تماماً
+            // إظهار الصفحة الأخيرة بعد اكتمال الاختفاء تماماً
             setTimeout(() => {
                 finalPage.classList.add('active');
                 setTimeout(() => {
                     namesPage.classList.remove('active');
                 }, 600);
-            }, 7800);
+            }, 7500);
         });
     </script>
 </body>
